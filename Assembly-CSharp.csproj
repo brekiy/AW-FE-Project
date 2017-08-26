@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Main Project\Scripts\BaseGuiController.cs" />
      <Compile Include="Assets\Main Project\Scripts\FEUnit.cs" />
+     <Compile Include="Assets\Main Project\Scripts\GuiAttackMode.cs" />
      <Compile Include="Assets\Main Project\Scripts\HexCell.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Core\AStarPathfinding.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Core\BreadthFirstSearch.cs" />

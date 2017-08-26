@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,43 +43,53 @@ public class FEUnit : Unit {
   /// Method indicates if it is possible to attack unit given as parameter, from cell given as second parameter.
   /// </summary>
   public override bool IsUnitAttackable(Unit other, Cell sourceCell){
-      if (sourceCell.GetDistance(other.Cell) <= 1 
-          || sourceCell.GetDistance(other.Cell) <= RangedRange
-          || sourceCell.GetDistance(other.Cell) <= MagicRange)
-          return true;
-      else return false;
+    if (sourceCell.GetDistance(other.Cell) <= 1 
+      || sourceCell.GetDistance(other.Cell) <= RangedRange
+      || sourceCell.GetDistance(other.Cell) <= MagicRange)
+      return true;
+    else return false;
+  }
+
+  public void UnitAttackMode(FEUnit unit, Unit other, Cell sourceCell) {
+    GameObject AttackPanel = GameObject.Find("Attack Panel");
+    AttackPanel.SetActive(true);
+    Button Melee = GameObject.Find("Select Melee Attack").GetComponent<Button>();
+    Button Ranged = GameObject.Find("Select Ranged Attack").GetComponent<Button>();
+    Button Magic = GameObject.Find("Select Magic Attack").GetComponent<Button>();
+    //Melee.onClick
   }
 
   /// <summary>
   /// Method deals damage to unit given as parameter.
   /// </summary>
   public void DealDamage(FEUnit other){
-      if (isMoving) return;
-      if (ActionPoints == 0) return;
-      if (!IsUnitAttackable(other, Cell)) return;
+    if (isMoving) return;
+    if (ActionPoints == 0) return;
+    if (!IsUnitAttackable(other, Cell)) return;
+    UnitAttackMode(this, other, Cell);
 
-      MarkAsAttacking(other);
-      ActionPoints--;
-      switch (this.CurrentAttack){
-          case AttackType.melee:
-              other.Defend(this, MeleeAttack, AttackType.melee); break;
-          case AttackType.ranged:
-              other.Defend(this, RangedAttack, AttackType.ranged); break;
-          case AttackType.magic:
-              other.Defend(this, RangedAttack, AttackType.ranged); break;
-          default:
-              other.Defend(this, RangedAttack, AttackType.ranged); break;
-      }
+    MarkAsAttacking(other);
+    ActionPoints--;
+    switch (this.CurrentAttack){
+      case AttackType.melee:
+        other.Defend(this, MeleeAttack, AttackType.melee); break;
+      case AttackType.ranged:
+        other.Defend(this, RangedAttack, AttackType.ranged); break;
+      case AttackType.magic:
+        other.Defend(this, RangedAttack, AttackType.ranged); break;
+      default:
+        other.Defend(this, RangedAttack, AttackType.ranged); break;
+    }
 
-      if (ActionPoints == 0) {
-          SetState(new UnitStateMarkedAsFinished(this));
-          MovementPoints = 0;
-      }  
+    if (ActionPoints == 0) {
+      SetState(new UnitStateMarkedAsFinished(this));
+      MovementPoints = 0;
+    }  
   }
   /// <summary>
   /// Attacking unit calls Defend method on defending unit. 
   /// </summary>
-  protected void Defend(Unit other, int damage, AttackType attack){
+  protected void Defend(FEUnit other, int damage, AttackType attack){
       MarkAsDefending(other);
       int DamageTaken = 0;
       switch (attack) {
@@ -127,31 +138,31 @@ public class FEUnit : Unit {
   /// Method marks unit as current players unit.
   /// </summary>
   public override void MarkAsFriendly() {
-      GetComponent<Renderer>().material.color = LeadingColor + new Color(0.5f, 1, 1);
+      SetColor(new Color(0.8f, 1, 0.8f));
   }
   /// <summary>
   /// Method mark units to indicate user that the unit is in range and can be attacked.
   /// </summary>
   public override void MarkAsReachableEnemy() {
-      GetComponent<Renderer>().material.color = LeadingColor + Color.red;
+      SetColor(new Color(1,0.8f,0.8f));
   }
   /// <summary>
   /// Method marks unit as currently selected, to distinguish it from other units.
   /// </summary>
   public override void MarkAsSelected() {
-      GetComponent<Renderer>().material.color = LeadingColor + Color.green;
+      SetColor(new Color(0.8f, 0.8f, 1));
   }
   /// <summary>
   /// Method marks unit to indicate user that he can't do anything more with it this turn.
   /// </summary>
   public override void MarkAsFinished(){
-      GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 0.8f, 0.8f);
+      SetColor(Color.gray);
   }
   /// <summary>
   /// Method returns the unit to its base appearance
   /// </summary>
   public override void UnMark() {
-      GetComponent<Renderer>().material.color = LeadingColor;
+      SetColor(Color.white);
   }
 
   private void SetColor(Color color) {

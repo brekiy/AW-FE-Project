@@ -16,6 +16,7 @@ public class BaseGuiController : MonoBehaviour {
   void Start() {
     //UnitImage.color = Color.gray;
     StatsPanel = GameObject.Find("Stats Panel");
+    AttackPanel = GameObject.Find("Attack Panel");
     CellGrid.GameStarted += OnGameStarted;
     CellGrid.TurnEnded += OnTurnEnded;
     CellGrid.GameEnded += OnGameEnded;
@@ -71,10 +72,10 @@ public class BaseGuiController : MonoBehaviour {
     "\nRange: " + unit.RangedRange + "\nMagic Range: " + unit.MagicRange + "\nAmmunition: " + unit.Ammunition +
     "\nMelee Defense: " + unit.MeleeDefense + "\nArmor: " + unit.Armor + "\nResistance: " + unit.Resistance +
     "\nMorale: " + unit.Morale;
-        //UnitImage.color = unit.PlayerColor;
+    //UnitImage.color = unit.PlayerColor;
   }
 
-    public void RestartLevel() {
-        Application.LoadLevel(Application.loadedLevel);
-    }
+  public void RestartLevel() {
+    Application.LoadLevel(Application.loadedLevel);
+  }
 }
